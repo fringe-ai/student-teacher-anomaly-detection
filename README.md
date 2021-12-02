@@ -84,6 +84,11 @@ And more results are available under **/result** folder
 | transistor | 0.67 |
 | wood | 0.89 |
 
+#### Next steps
+* Experiment with different patch sizes
+* Retrain the teacher and student models
+* Review source code for errors
+
 
 
 
