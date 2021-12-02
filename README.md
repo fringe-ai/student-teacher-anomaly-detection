@@ -84,6 +84,19 @@ And more results are available under **/result** folder
 | transistor | 0.67 |
 | wood | 0.89 |
 
+| Class | Sample Images |
+| --- | --- |
+| Capsule | ![Capsule Collage](test_images/capsule/capsule_collage.png) |
+| Carpet | ![Carpet Collage](test_images/carpet/carpet_collage.png) |
+| Hazelnut | ![Hazelnut Collage](test_images/hazelnut/hazelnut_collage.png) |
+| Leather | ![Leather Collage](test_images/leather/leather_collage.png) |
+| Metal Nut | ![Metal Nut Collage](test_images/metal_nut/metalnut_collage.png) |
+| Pill | ![Pill Collage](test_images/pill/pill_collage.png) |
+| Tile | ![Tile Collage](test_images/tile/tile_collage.png) |
+| Toothbrush | ![Toothbrush Collage](test_images/toothbrush/toothbrush_collage.png) |
+| Transistor | ![Transitor Collage](test_images/transistor/transistor_collage.png) |
+| Wood | ![Wood Collage](test_images/wood/wood_collage.png) |
+
 #### Next steps
 * Experiment with different patch sizes
 * Retrain the teacher and student models
