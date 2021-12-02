@@ -1,3 +1,5 @@
+import os
+import time
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,24 +14,24 @@ from utils import increment_mean_and_var, load_model
 from sklearn.metrics import roc_curve, auc
 
 
-def parse_arguments():
-    parser = ArgumentParser()
+# def parse_arguments():
+#     parser = ArgumentParser()
 
-    # program arguments
-    parser.add_argument('--dataset', type=str, default='carpet', help="Dataset to infer on (in data folder)")
-    parser.add_argument('--test_size', type=int, default=20, help="Number of batch for the test set")
-    parser.add_argument('--n_students', type=int, default=3, help="Number of students network to use")
-    parser.add_argument('--patch_size', type=int, default=65, choices=[17, 33, 65])
-    parser.add_argument('--image_size', type=int, default=256)
-    parser.add_argument('--visualize', type=bool, default=True, help="Display anomaly map batch per batch")
+#     # program arguments
+#     parser.add_argument('--dataset', type=str, default='carpet', help="Dataset to infer on (in data folder)")
+#     parser.add_argument('--test_size', type=int, default=20, help="Number of batch for the test set")
+#     parser.add_argument('--n_students', type=int, default=3, help="Number of students network to use")
+#     parser.add_argument('--patch_size', type=int, default=65, choices=[17, 33, 65])
+#     parser.add_argument('--image_size', type=int, default=256)
+#     parser.add_argument('--visualize', type=bool, default=True, help="Display anomaly map batch per batch")
 
-    # trainer arguments
-    parser.add_argument('--gpus', type=int, default=(1 if torch.cuda.is_available() else 0))
-    parser.add_argument('--batch_size', type=int, default=1)
-    parser.add_argument('--num_workers', type=int, default=4)
+#     # trainer arguments
+#     parser.add_argument('--gpus', type=int, default=(1 if torch.cuda.is_available() else 0))
+#     parser.add_argument('--batch_size', type=int, default=1)
+#     parser.add_argument('--num_workers', type=int, default=4)
 
-    args = parser.parse_args()
-    return args
+#     args = parser.parse_args()
+#     return args
 
 
 def get_error_map(students_pred, teacher_pred):
@@ -117,7 +119,14 @@ def visualize(img, gt, score_map, max_score):
     plt.title('Anomaly map')
 
     plt.clim(0, max_score)
-    plt.show(block=True)
+    # plt.show(block=True)
+    if not os.path.exists('../test_images'):
+        os.makedirs('../test_images')
+    fname=f'{time.time()}_sample.png'
+    fpath=os.path.join('../test_images',fname)
+    plt.savefig(fpath,dpi=100)
+    
+
 
 
 def detect_anomaly(args):
@@ -185,9 +194,14 @@ def detect_anomaly(args):
         inputs = batch['image'].to(device)
         gt = batch['gt'].cpu()
 
+        tstart=time.time()
         score_map = get_score_map(inputs, teacher, students, params).cpu()
         y_score = np.concatenate((y_score, rearrange(score_map, 'b h w -> (b h w)').numpy()))
         y_true = np.concatenate((y_true, rearrange(gt, 'b c h w -> (b c h w)').numpy()))
+        tstop=time.time()
+        tproc=tstop-tstart
+        print(f'[INFO] Img {i} proc time: {tproc} ')
+
 
         if args.visualize:
             unorm = transforms.Normalize((-1, -1, -1), (2, 2, 2)) # get back to original image
@@ -212,9 +226,30 @@ def detect_anomaly(args):
     plt.ylabel('TPR')
     plt.legend()
     plt.grid()
-    plt.show()
+    # plt.show()
+    if not os.path.exists('../test_images'):
+        os.makedirs('../test_images')
+    fname=f'{time.time()}_ROC_AUC.png'
+    fpath=os.path.join('../test_images',fname)
+    plt.savefig(fpath,dpi=100)
 
 
 if __name__ == '__main__':
-    args = parse_arguments()
+    parser = ArgumentParser()
+
+    # program arguments
+    parser.add_argument('--dataset', type=str, default='carpet', help="Dataset to infer on (in data folder)")
+    parser.add_argument('--test_size', type=int, default=20, help="Number of batch for the test set")
+    parser.add_argument('--n_students', type=int, default=3, help="Number of students network to use")
+    parser.add_argument('--patch_size', type=int, default=65, choices=[17, 33, 65])
+    parser.add_argument('--image_size', type=int, default=256)
+    parser.add_argument('--visualize', type=bool, default=True, help="Display anomaly map batch per batch")
+
+    # trainer arguments
+    parser.add_argument('--gpus', type=int, default=(1 if torch.cuda.is_available() else 0))
+    parser.add_argument('--batch_size', type=int, default=1)
+    parser.add_argument('--num_workers', type=int, default=4)
+    
+    args = parser.parse_args()
+
     detect_anomaly(args)

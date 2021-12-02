@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Anomaly Detection",
+            "type": "python",
+            "request": "launch",
+            "program": "anomaly_detection.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--dataset","carpet",
+                "--patch_size","65",
+                "--n_students","3"
+            ]
+        }
+    ]
+}
