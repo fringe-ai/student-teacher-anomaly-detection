@@ -60,3 +60,31 @@ And more results are available under **/result** folder
 ### Fast Dense Feature Extraction
 * [https://www.dfki.de/fileadmin/user_upload/import/9245_FastCNNFeature_BMVC.pdf](https://www.dfki.de/fileadmin/user_upload/import/9245_FastCNNFeature_BMVC.pdf)
 * [https://github.com/erezposner/Fast_Dense_Feature_Extraction](https://github.com/erezposner/Fast_Dense_Feature_Extraction)
+
+## LMI AI Solutions Tests
+### 12/2/2021
+#### Source Code Changes:
+* Modified anomaly_detection.py to save sample images and AUC curve
+
+#### Performance Results
+* Re-trained teacher and student models for all rgb datasets with patch size = 33
+* Accuracy is poor
+* Predict processing time on training machine with NVIDIA GeForce RTX 3090: 60ms
+
+| Class | AUC |
+| --- | --- |
+| capsule | 0.77 |
+| carpet | 0.95 |
+| hazelnut | 0.63 |
+| leather | 0.85 |
+| metal nut | 0.46 |
+| pill | 0.44 |
+| tile | 0.84 |
+| toothbrush | 0.85 |
+| transistor | 0.67 |
+| wood | 0.89 |
+
+
+
+
+
